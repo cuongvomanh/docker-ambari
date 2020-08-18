@@ -88,3 +88,14 @@ an Ambari cluster:
 curl -Lo .amb j.mp/docker-ambari && source .amb && amb-deploy-cluster
 ```
 
+## Customise
+
+```
+docker ps -a | grep 'amba\|sequenceiq' | awk '{print $1}' | xargs docker rm -f
+```
+
+After start cluster
+
+```
+docker exec -it amb-server /bin/sh /tmp/entrypoint.sh
+```

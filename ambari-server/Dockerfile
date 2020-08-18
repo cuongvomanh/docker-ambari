@@ -1,4 +1,4 @@
-FROM hortonworks/ambari-base:7.2-v7
+FROM hortonworks/ambari-base:cuongvm12
 MAINTAINER Hortonworks
 
 # add ambari repo
@@ -20,12 +20,15 @@ ADD init/init-server.sh /opt/ambari-server/init-server.sh
 RUN chmod u+x /opt/ambari-server/init-server.sh
 
 # add mysql and psql connectors to ambari-server so it can be downloaded by services (e.g.: Ranger)
-ADD http://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.39.tar.gz /var/lib/ambari-server/resources/mysql-jdbc-driver.jar
-ADD https://jdbc.postgresql.org/download/postgresql-9.4.1208.jre7.jar /var/lib/ambari-server/resources/postgres-jdbc-driver.jar
+ADD https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-5.1.49.tar.gz /var/lib/ambari-server/resources/mysql-jdbc-driver.jar
+ADD https://jdbc.postgresql.org/download/postgresql-42.2.14.jar /var/lib/ambari-server/resources/postgres-jdbc-driver.jar
 
 ADD init/ambari-server.service /etc/systemd/system/ambari-server.service
 RUN systemctl enable ambari-server
+#RUN ambari-server setup -s
+#RUN ambari-server start
 
-RUN echo DefaultEnvironment=\"JAVA_HOME=$JAVA_HOME\" >> /etc/systemd/system.conf
+RUN echo DefaultEnvironment=\"JAVA_HOME=/usr/jdk64/jdk1.8.0_112/bin/java\" >> /etc/systemd/system.conf
 
 EXPOSE 8080
+ADD entrypoint.sh /tmp/
